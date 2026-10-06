@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hitster Klassik – Übersicht</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+  :root { --bg: #f6f3ee; --text: #1d1a2e; --leise: #666; --linie: #ddd6ca; --warn: #fff3cd; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #14112a; --text: #f4efe4; --leise: #aaa3c2; --linie: #332c5c; --warn: #4a3d12; }
+  }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: Georgia, "Palatino Linotype", serif; line-height: 1.45; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { margin: 0 0 4px; }
+  .leise { color: var(--leise); }
+  a { color: inherit; }
+  .karte { border-top: 1px solid var(--linie); padding: 14px 0; display: grid; grid-template-columns: 4.5rem 1fr; gap: 4px 16px; }
+  .karte .jahr { font-size: 1.4rem; font-weight: bold; }
+  .karte .id { font-size: .8rem; color: var(--leise); }
+  .karte audio { width: 100%; max-width: 360px; height: 36px; margin-top: 6px; }
+  .karte .quelle { font-size: .8rem; color: var(--leise); word-break: break-word; }
+  .karte .warnung { background: var(--warn); padding: 4px 8px; border-radius: 6px; font-size: .85rem; margin-top: 6px; }
+  #filter { margin: 16px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Übersicht &amp; Quellen</h1>
+  <p class="leise">Achtung, enthält alle Lösungen! Hier kannst du jeden Schnipsel anhören und prüfen. Alle Aufnahmen stammen von
+    <a href="https://commons.wikimedia.org/">Wikimedia Commons</a> und stehen unter freien Lizenzen. Interpret, Lizenz und Link zur Quelle stehen bei jeder Karte.</p>
+  <label id="filter"><input type="checkbox" id="nurwarn"> nur Karten mit Hinweis zeigen</label>
+  <div id="liste">Lade …</div>
+  <p><a href="./">← zurück zum Spiel</a></p>
+</div>
+<script>
+'use strict';
+const el = (tag, klasse, text) => { const e = document.createElement(tag); if (klasse) e.className = klasse; if (text != null) e.textContent = text; return e; };
+let karten = [];
+function zeichne() {
+  const nurWarn = document.getElementById('nurwarn').checked;
+  const liste = document.getElementById('liste');
+  liste.innerHTML = '';
+  karten.filter((k) => !nurWarn || k.warnung).forEach((k) => {
+    const d = el('div', 'karte');
+    const links = el('div');
+    links.appendChild(el('div', 'jahr', (k.ca ? 'ca. ' : '') + k.jahr));
+    links.appendChild(el('div', 'id', 'Karte ' + k.id));
+    const rechts = el('div');
+    rechts.appendChild(el('div', null, k.komponist)).style.fontWeight = 'bold';
+    rechts.appendChild(el('div', null, k.werk)).style.fontStyle = 'italic';
+    rechts.appendChild(el('div', 'leise', k.interpret || ''));
+    if (k.audio) {
+      const a = el('audio'); a.controls = true; a.preload = 'none'; a.src = 'audio/' + k.id + '.mp3';
+      rechts.appendChild(a);
+    }
+    if (k.quelle) {
+      const q = el('div', 'quelle');
+      const link = el('a', null, k.quelle.datei); link.href = k.quelle.seite || '#'; link.target = '_blank'; link.rel = 'noopener';
+      q.append('Quelle: ', link, ' · Lizenz: ' + (k.quelle.lizenz || '?') + (k.quelle.autor ? ' · ' + k.quelle.autor : ''));
+      if (k.clip_start != null) q.append(' · Schnipsel ab ' + k.clip_start + ' s');
+      rechts.appendChild(q);
+    }
+    if (k.warnung) rechts.appendChild(el('div', 'warnung', k.warnung));
+    d.append(links, rechts);
+    liste.appendChild(d);
+  });
+}
+fetch('karten.json', { cache: 'no-store' }).then((r) => r.json()).then((d) => {
+  karten = d.sort((a, b) => a.jahr - b.jahr || a.id.localeCompare(b.id));
+  zeichne();
+}).catch(() => { document.getElementById('liste').textContent = 'karten.json fehlt – die Seite wurde noch nicht gebaut.'; });
+document.getElementById('nurwarn').addEventListener('change', zeichne);
+</script>
+</body>
+</html>

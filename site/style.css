@@ -1,0 +1,100 @@
+:root {
+  --bg: #14112a;
+  --bg2: #221c45;
+  --text: #f4efe4;
+  --leise: #b9b2cf;
+  --gold: #e3b964;
+  --gold2: #f6d58d;
+  --rot: #b4364f;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  background: radial-gradient(ellipse at top, var(--bg2), var(--bg) 70%) fixed;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  display: flex;
+  flex-direction: column;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) 16px 16px;
+}
+
+.view { display: none; width: 100%; max-width: 420px; text-align: center; }
+.view.aktiv { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+
+.logo { font-size: 96px; line-height: 1; color: var(--gold); text-shadow: 0 0 30px rgba(227,185,100,.35); }
+.logo.klein { font-size: 64px; }
+
+h1 { font-size: 2.6rem; margin: 0; font-weight: 600; letter-spacing: .02em; }
+h1 span { color: var(--gold); font-style: italic; }
+.unter { color: var(--leise); margin: 0 0 12px; line-height: 1.5; font-size: 1.05rem; }
+
+button {
+  font: inherit;
+  border: 0;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 16px 28px;
+  font-size: 1.15rem;
+  min-height: 56px;
+}
+.haupt { background: linear-gradient(180deg, var(--gold2), var(--gold)); color: #2a1f05; font-weight: 600; box-shadow: 0 6px 24px rgba(227,185,100,.25); }
+.zweit { background: rgba(255,255,255,.08); color: var(--text); border: 1px solid rgba(255,255,255,.18); }
+button:active { transform: scale(.97); }
+#start .haupt, #fehler .haupt { width: 100%; max-width: 320px; }
+
+/* Scanner */
+.kamera { position: relative; width: 100%; aspect-ratio: 1; border-radius: 24px; overflow: hidden; background: #000; }
+.kamera video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rahmen {
+  position: absolute; inset: 15%;
+  border-radius: 18px;
+  box-shadow: 0 0 0 999px rgba(0,0,0,.35);
+  border: 3px solid var(--gold);
+  animation: puls 1.8s ease-in-out infinite;
+}
+@keyframes puls { 50% { border-color: var(--gold2); transform: scale(1.02); } }
+.hinweis { color: var(--leise); margin: 0; min-height: 1.4em; }
+
+/* Spieler */
+.kartennr { color: var(--leise); letter-spacing: .15em; text-transform: uppercase; font-size: .85rem; margin: 0; }
+.play {
+  position: relative; width: 240px; height: 240px; padding: 0;
+  background: radial-gradient(circle, #2e2660, #1b1638);
+  box-shadow: 0 10px 50px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.play svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.play circle { fill: none; stroke-width: 6; }
+.play .spur { stroke: rgba(255,255,255,.1); }
+.play .fortschritt { stroke: var(--gold); stroke-linecap: round; transition: stroke-dashoffset .25s linear; }
+.symbol {
+  position: absolute; left: 50%; top: 50%;
+  width: 0; height: 0;
+  border-style: solid; border-width: 36px 0 36px 60px;
+  border-color: transparent transparent transparent var(--gold2);
+  transform: translate(-38%, -50%);
+}
+.play.spielt .symbol {
+  width: 56px; height: 68px; border: 0;
+  border-left: 20px solid var(--gold2); border-right: 20px solid var(--gold2);
+  transform: translate(-50%, -50%);
+}
+.status { font-size: 1.25rem; margin: 0; min-height: 1.5em; }
+.reihe { display: flex; gap: 12px; width: 100%; }
+.reihe button { flex: 1; padding: 16px 12px; }
+
+footer { text-align: center; padding: 12px 16px max(12px, env(safe-area-inset-bottom)); font-size: .85rem; color: var(--leise); }
+footer a { color: var(--leise); }
+body:not([data-ansicht="start"]) footer { visibility: hidden; }

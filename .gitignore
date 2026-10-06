@@ -1,0 +1,4 @@
+_site/
+.cache/
+build-bericht.md
+__pycache__/

@@ -1,0 +1,47 @@
+name: Bauen und auf GitHub Pages veröffentlichen
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ffmpeg installieren
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Schnipsel-Cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/clips
+          key: clips-${{ hashFiles('data/werke.json', 'scripts/build.py') }}
+          restore-keys: clips-
+      - name: Schnipsel schneiden und Seite bauen
+        run: python3 scripts/build.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

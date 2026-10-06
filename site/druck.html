@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hitster Klassik – Druckvorlage</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+  :root { --karte: 60mm; --bg: #f3f0ea; --text: #1d1a2e; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: Georgia, "Palatino Linotype", serif; }
+
+  .steuerung { max-width: 760px; margin: 0 auto; padding: 24px 16px; line-height: 1.5; }
+  .steuerung h1 { margin: 0 0 8px; }
+  .steuerung label { display: block; margin: 12px 0 4px; font-weight: bold; }
+  .steuerung input[type=text] { width: 100%; padding: 10px; font: inherit; border: 1px solid #bbb; border-radius: 8px; }
+  .steuerung button { font: inherit; padding: 12px 24px; border: 0; border-radius: 999px; background: #1d1a2e; color: #fff; cursor: pointer; margin-top: 16px; }
+  .steuerung .warnung { background: #fff3cd; border: 1px solid #e0c46c; padding: 10px 14px; border-radius: 8px; }
+  .steuerung ol { padding-left: 20px; }
+
+  .blatt {
+    width: 210mm; height: 297mm; margin: 16px auto; background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,.15);
+    page-break-after: always; break-after: page;
+  }
+  .raster { display: grid; grid-template-columns: repeat(3, var(--karte)); grid-auto-rows: var(--karte); }
+  .karte {
+    width: var(--karte); height: var(--karte);
+    outline: 0.2mm dashed #bbb; outline-offset: -0.1mm;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+  .karte.leer { outline: none; }
+
+  .vorne svg { width: 40mm; height: 40mm; display: block; }
+  .vorne .marke { position: absolute; bottom: 4mm; font-size: 7pt; letter-spacing: .2em; text-transform: uppercase; color: #777; }
+
+  .hinten { padding: 5mm 4mm; text-align: center; justify-content: space-between; }
+  .hinten .komponist { font-size: 10pt; font-weight: bold; line-height: 1.2; }
+  .hinten .jahr { font-size: 30pt; font-weight: bold; line-height: 1; letter-spacing: .02em; }
+  .hinten .jahr small { display: block; font-size: 8pt; font-weight: normal; letter-spacing: .1em; margin-bottom: 1mm; }
+  .hinten .werk { font-size: 8.5pt; font-style: italic; line-height: 1.25; }
+  .hinten .interpret { font-size: 6.5pt; color: #444; line-height: 1.2; }
+  .hinten .mitte { display: flex; flex-direction: column; gap: 2.5mm; }
+
+  body.farbig .hinten.barock { background: #d8ebe4; }
+  body.farbig .hinten.klassik { background: #f3dcdc; }
+  body.farbig .hinten.romantik { background: #dfdcf2; }
+  body.farbig .hinten.moderne { background: #f6e7c8; }
+
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .steuerung { display: none; }
+    .blatt { margin: 0; box-shadow: none; }
+  }
+</style>
+</head>
+<body class="farbig">
+<div class="steuerung">
+  <h1>Druckvorlage</h1>
+  <p id="info">Lade Karten …</p>
+  <label for="basis">Adresse der Webapp (steht im QR-Code)</label>
+  <input type="text" id="basis">
+  <label><input type="checkbox" id="farbig" checked> Rückseiten farbig nach Epoche (Barock · Klassik · Romantik · Moderne)</label>
+  <ol>
+    <li>Auf A4 drucken, Skalierung <b>100 %</b> („Tatsächliche Größe“), keine Seitenränder.</li>
+    <li><b>Beidseitig, an der langen Kante spiegeln</b>. Auf jedes Blatt mit QR-Codes folgt das passende Blatt mit den Lösungen.</li>
+    <li>Am besten auf dickeres Papier (200–300 g/m²) drucken und entlang der gestrichelten Linien schneiden.</li>
+  </ol>
+  <button onclick="window.print()">Drucken</button>
+</div>
+<div id="blaetter"></div>
+<script src="vendor/qrcode.js"></script>
+<script src="druck.js"></script>
+</body>
+</html>

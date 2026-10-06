@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14112a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Hitster Klassik</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <!-- Start -->
+  <section id="start" class="view aktiv">
+    <div class="logo" aria-hidden="true">𝄞</div>
+    <h1>Hitster <span>Klassik</span></h1>
+    <p class="unter">Karte scannen, 15 Sekunden zuhören, Werk richtig in die Zeitleiste legen.</p>
+    <button class="haupt" data-aktion="scannen">Karte scannen</button>
+  </section>
+
+  <!-- Scanner -->
+  <section id="scanner" class="view">
+    <div class="kamera">
+      <video id="video" playsinline muted autoplay></video>
+      <div class="rahmen" aria-hidden="true"></div>
+    </div>
+    <p class="hinweis" id="scan-hinweis">QR-Code der Karte in den Rahmen halten</p>
+    <button class="zweit" data-aktion="abbrechen">Abbrechen</button>
+  </section>
+
+  <!-- Wiedergabe -->
+  <section id="spieler" class="view">
+    <p class="kartennr" id="kartennr"></p>
+    <button id="play" class="play" aria-label="Abspielen">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="spur" cx="60" cy="60" r="54"/>
+        <circle class="fortschritt" id="ring" cx="60" cy="60" r="54"/>
+      </svg>
+      <span class="symbol" id="symbol"></span>
+    </button>
+    <p class="status" id="status">Tippen zum Abspielen</p>
+    <div class="reihe">
+      <button class="zweit" data-aktion="nochmal">Nochmal</button>
+      <button class="haupt" data-aktion="scannen">Nächste Karte</button>
+    </div>
+  </section>
+
+  <!-- Fehler -->
+  <section id="fehler" class="view">
+    <div class="logo klein" aria-hidden="true">?</div>
+    <p class="status" id="fehlertext"></p>
+    <button class="haupt" data-aktion="scannen">Nochmal scannen</button>
+  </section>
+</main>
+<footer>
+  <a href="druck.html">Druckvorlage</a> · <a href="uebersicht.html">Übersicht &amp; Quellen</a>
+</footer>
+<script src="vendor/jsQR.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
