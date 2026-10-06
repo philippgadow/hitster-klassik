@@ -2,7 +2,8 @@ name: Bauen und auf GitHub Pages veröffentlichen
 
 on:
   push:
-    branches: [main, claude/eager-mendel-tu1o7t]
+    branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -37,6 +38,8 @@ jobs:
           path: _site
 
   deploy:
+    # Pull Requests werden nur gebaut, veröffentlicht wird von main
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:
