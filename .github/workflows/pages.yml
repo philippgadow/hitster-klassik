@@ -2,7 +2,7 @@ name: Bauen und auf GitHub Pages veröffentlichen
 
 on:
   push:
-    branches: [main]
+    branches: [main, claude/eager-mendel-tu1o7t]
   workflow_dispatch:
 
 permissions:
