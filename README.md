@@ -30,6 +30,7 @@ Jeder Eintrag in `data/werke.json`:
 | `komponist`, `werk`, `jahr` | Das steht auf der Rückseite. Mit `"ca": true` steht „ca.“ vor dem Jahr. |
 | `suche` | Suchbegriffe für Wikimedia Commons |
 | `treffer` | Liste von regulären Ausdrücken, die alle im (kleingeschriebenen, akzentfreien) Dateinamen vorkommen müssen |
+| `ohne` *(optional)* | Reguläre Ausdrücke für Dateinamen, die nicht gewählt werden dürfen, z.B. `"guitar"`. Ausschnitte, Backing-Tracks, Remixe usw. sind immer ausgeschlossen. |
 | `start` | Startpunkt des Schnipsels in Sekunden. Negative Werte zählen vom Ende, z.B. `-150` |
 | `datei` *(optional)* | Eine Commons-Datei fest vorgeben, z.B. `"Beethoven - Für Elise.ogg"`. Die Suche entfällt dann. |
 | `interpret` *(optional)* | Interpret für die Karte überschreiben, falls die Angabe auf Commons unpassend ist |

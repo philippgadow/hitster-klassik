@@ -31,6 +31,8 @@ UA = "hitster-klassik/1.0 (https://github.com/philippgadow/hitster-klassik)"
 AUDIO_EXT = (".ogg", ".oga", ".opus", ".flac", ".wav", ".mp3", ".webm")
 LAENGE = 15  # Sekunden
 CLIP_VERSION = "1"  # erhöhen, wenn sich die ffmpeg-Parameter ändern
+# Dateinamen mit diesen Mustern sind Ausschnitte, Bearbeitungen o.Ä. und werden nie gewählt
+AUSSCHLUSS = r"midi|backing track|karaoke|\bfeat\b|remix|closing bars|\bbars? \d|ringtone|8.?bit|synth|chiptune"
 
 
 def norm(s):
@@ -94,10 +96,11 @@ def suchen(werk):
     })
     pages = sorted(data.get("query", {}).get("pages", []), key=lambda p: p.get("index", 0))
     muster = [re.compile(t) for t in werk.get("treffer", [])]
+    ohne = re.compile("|".join([AUSSCHLUSS] + werk.get("ohne", [])))
     kandidaten = []
     for p in pages:
         titel = p["title"]
-        if not norm(titel).endswith(AUDIO_EXT) or "midi" in norm(titel):
+        if not norm(titel).endswith(AUDIO_EXT) or ohne.search(norm(titel)):
             continue
         info = info_aus_seite(p)
         if not info:
